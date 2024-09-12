@@ -1,6 +1,19 @@
+import Navbar from '@/components/Navbar'
+import { AuthProvider } from '@/context/auth'
 import '@/styles/globals.css'
 import type { AppProps } from 'next/app'
 
 export default function App({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />
+  return (
+
+    // childrenはvalueがどこでも使えるという意味。（login,logout）
+    //アプリ全体で値を共有して使うことができる。
+    <AuthProvider>
+      <div>
+        <Navbar />
+        <Component {...pageProps} />
+      </div>
+    </AuthProvider>
+
+  )
 }
