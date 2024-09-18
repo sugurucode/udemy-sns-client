@@ -13,6 +13,7 @@ const Timeline = () => {
             const newPost = await apiClient.post("/posts/post", {
                 content: postText,
             });
+            // prevPostは引数→どこかで値を渡す必要がある→コールバック関数であり、Reactga内部で現在の状態を引数として渡してくれる
             setLatestPost((prevPosts) => [newPost.data, ...prevPosts]);
             setPostText("");
         } catch (error) {

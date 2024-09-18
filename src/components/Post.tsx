@@ -1,7 +1,7 @@
 import React from 'react'
-import Image from 'next/image';
 import type { PostType } from '@/types';
 import Link from 'next/link';
+import { useAuth } from '@/context/auth';
 interface Props {
     post: PostType,
 }
@@ -38,3 +38,7 @@ const Post = (props: Props) => {
 }
 
 export default Post
+
+function userAuth(): { user: any; } {
+    throw new Error('Function not implemented.');
+}
