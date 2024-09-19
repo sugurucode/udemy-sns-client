@@ -6,7 +6,7 @@ import React, { useEffect, useState } from 'react';
 
 type Props = {
     profile: Profile;
-    posts: PostType[];
+    initialPosts: PostType[];
 };
 
 export const getServerSideProps = async (context: any) => {
@@ -18,7 +18,7 @@ export const getServerSideProps = async (context: any) => {
         return {
             props: {
                 profile: profileResponse.data,
-                posts: postsResponse.data,
+                initialPosts: postsResponse.data,
             },
         };
     } catch (error) {
@@ -29,7 +29,7 @@ export const getServerSideProps = async (context: any) => {
     }
 };
 
-const UserProfile = ({ profile, posts }: Props) => {
+const UserProfile = ({ profile, initialPosts }: Props) => {
     // 編集モードの状態
     const [isEditing, setIsEditing] = useState(false);
     const [username, setUsername] = useState(profile.user.username);
@@ -37,6 +37,7 @@ const UserProfile = ({ profile, posts }: Props) => {
     //const [isUserIdMatching, setIsUserIdMatching] = useState(true);
     const { user } = useAuth();
     const [isUserIdMatching, setIsUserIdMatching] = useState(false);
+    const [posts, setPosts] = useState<PostType[]>(initialPosts);
 
     console.log(user?.id);
     console.log(profile.user.id);
@@ -73,16 +74,20 @@ const UserProfile = ({ profile, posts }: Props) => {
     };
 
     // プロフィール削除処理
-    const handleProfileDelete = async () => {
+    const handlePostDelete = async (postId: number) => {
         try {
+            console.log("postId" + postId);
+
             // APIリクエストでプロフィール情報を更新
-            await apiClient.put(`/users/profile/${profile.user.id}`, {
-                username,
-                bio,
+            await apiClient.delete(`/posts/delete/${postId}`, {
             });
-            setIsEditing(false);  // 編集モードを終了
+
+            console.log(posts);
+            setPosts(prevPost => prevPost.filter(post => post.id !== postId));
+            console.log(posts);
+
         } catch (error) {
-            console.error("プロフィールの更新中にエラーが発生しました。", error);
+            console.error("プロフィールの削除中にエラーが発生しました。", error);
         }
     };
 
@@ -150,9 +155,8 @@ const UserProfile = ({ profile, posts }: Props) => {
                                 </div>
                                 {isUserIdMatching && (
                                     <button
-
                                         className="ml-auto text-gray-500 hover:text-gray-800  rounded px-4 py-2 text-sm"
-                                        onClick={isEditing ? handleProfileUpdate : toggleEditMode}
+                                        onClick={() => handlePostDelete(post?.id)}
                                     >
                                         削除
                                     </button>
