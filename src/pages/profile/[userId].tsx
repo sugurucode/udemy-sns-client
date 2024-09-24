@@ -73,7 +73,7 @@ const UserProfile = ({ profile, initialPosts }: Props) => {
         }
     };
 
-    // プロフィール削除処理
+    // ポスト削除処理
     const handlePostDelete = async (postId: number) => {
         try {
             console.log("postId" + postId);
@@ -87,9 +87,20 @@ const UserProfile = ({ profile, initialPosts }: Props) => {
             console.log(posts);
 
         } catch (error) {
-            console.error("プロフィールの削除中にエラーが発生しました。", error);
+            console.error("ポストの削除中にエラーが発生しました。", error);
         }
     };
+
+    const handleProfileDelete = async () => {
+        try {
+            // APIリクエストでプロフィール情報を更新
+            await apiClient.delete(`/users/delete/${profile.user.id}`, {
+            });
+
+        } catch (error) {
+            console.error("アカウントの削除中にエラーが発生しました。", error);
+        }
+    }
 
     return (
         <div className="container mx-auto px-4 py-8">
@@ -164,9 +175,19 @@ const UserProfile = ({ profile, initialPosts }: Props) => {
                             </div>
                             <p className="text-gray-700">{post.content}</p>
                         </div>
+
                     </div>
                 ))}
+                <button
+                    className="absolute bottom-4 right-4 border border-gray-500 text-gray-500 hover:text-gray-800 rounded px-4 py-2 text-sm"
+                    onClick={() => handleProfileDelete()}
+                >
+                    削除
+                </button>
             </div>
+
+
+
         </div>
     );
 };

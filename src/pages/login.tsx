@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import { useRouter } from 'next/router';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import apiClient from '@/lib/apiClient';
 import { useAuth } from '@/context/auth';
 
@@ -12,8 +12,20 @@ const Login = () => {
     const router = useRouter();
     const { login } = useAuth();
 
+    useEffect(() => {
+        // クエリパラメータからemailとpasswordを取得
+        const query = router.query;
+        console.log(query);
+        if (query.email) setEmail(query.email as string);
+        if (query.password) setPassword(query.password as string);
+    }, [router.query]);
+
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+
+
+
+
 
         //console.log(name, email, password);
         //新規登録を行うAPIを叩く
@@ -62,6 +74,7 @@ const Login = () => {
                                 autoComplete="email"
                                 required
                                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 text-base focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                                value={email}
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                                     setEmail(e.target.value)}
                             />
@@ -80,6 +93,7 @@ const Login = () => {
                                 autoComplete="current-password"
                                 required
                                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 text-base focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                                value={password}
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                                     setPassword(e.target.value)}
 

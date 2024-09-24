@@ -21,7 +21,12 @@ const Signup = () => {
                 email,
                 password,
             });
-            router.push("/login");
+
+
+            router.push({
+                pathname: "/login",
+                query: { email, password }
+            });
         } catch (error) {
             alert("入力内容が正しくありません。")
         }
